@@ -6,7 +6,7 @@ st.set_page_config(page_title="Gestão Familiar", layout="wide")
 # ---------- Classe ----------
 class GestaoFamiliar:
     def __init__(self):
-
+        # Categorias e despesas
         categorias = {
             "Despesas Fixas": {
                 "Água": 30,
@@ -40,6 +40,104 @@ class GestaoFamiliar:
 
         self.df = pd.DataFrame(data, columns=["Categoria", "Despesa", "Valor"])
 
+        # Lista de compras
+        self.lista_compras = {
+            "Laticínios / Alternativas": [
+                "Iogurte magro natural/aromas sem açúcar",
+                "Kefir",
+                "Leite magro ou bebida vegetal sem açúcar",
+                "Queijo magro fatiado",
+                "Queijo fresco",
+            ],
+            "Cereais / Grãos": [
+                "Flocos de aveia fina",
+                "Cereais sem açúcar adicionado",
+                "Tapioca",
+            ],
+            "Frutos Secos / Sementes": [
+                "Frutos secos variados",
+                "Sementes (linhaça, girassol, abóbora, sésamo)",
+                "Chia",
+            ],
+            "Frutas": [
+                "Maçã",
+                "Laranja",
+                "Kiwi",
+                "Frutos vermelhos",
+                "Banana",
+                "Limão",
+            ],
+            "Óleos / Gorduras": [
+                "Azeite",
+                "Óleo de coco",
+            ],
+            "Adoçantes / Temperos": [
+                "Mel",
+                "Xarope de agave",
+                "Canela em pó",
+                "Essência de baunilha",
+            ],
+            "Proteínas": [
+                "Fiambre de aves",
+                "Whey protein",
+                "Ovos",
+                "Carne de aves",
+                "Peixe",
+                "Salmão fumado",
+                "Atum em lata",
+                "Camarões",
+                "Queijo fresco",
+                "Requeijão",
+                "Mozarela de búfala light",
+                "Grão-de-bico",
+                "Feijão",
+                "Favas",
+                "Edamame",
+                "Ervilhas",
+            ],
+            "Vegetais": [
+                "Alface",
+                "Rúcula",
+                "Espinafre",
+                "Agrião",
+                "Couve",
+                "Cenoura",
+                "Brócolos",
+                "Abobrinha",
+                "Pimentos",
+                "Tomate",
+                "Pepino",
+                "Beterraba",
+                "Legumes congelados",
+            ],
+            "Bebidas": [
+                "Chá",
+                "Tisana",
+                "Cevada",
+                "Chicória",
+                "Água",
+            ],
+            "Extras Alimentares": [
+                "Compota sem açúcar",
+                "Gelatina",
+                "Pudim de gelatina",
+                "Mousse de gelatina",
+                "Barrita saudável",
+                "Bolachas simples",
+                "Tostas integrais",
+                "Tortilhas de milho",
+                "Tortilhas de arroz",
+                "Tortilhas de grão-de-bico",
+            ],
+            "Outros (Casa / Higiene)": [
+                "Guardanapos",
+                "Gel de banho",
+                "Papel higiénico",
+                "Desentupidor",
+                "Limpador de sanitas",
+            ],
+        }
+
     def atualizar_valor(self, despesa, valor):
         mask = self.df["Despesa"].str.lower() == despesa.lower()
         if mask.any():
@@ -59,14 +157,17 @@ st.title("🏠 Gestão Familiar Mensal")
 
 menu = st.selectbox(
     "Escolhe a secção:",
-    ["Despesas Mensais", "Resumo", "Alimentação (em breve)"]
+    ["Despesas Mensais", "Resumo", "Lista de Compras"]
 )
 
 # ---------- DESPESAS ----------
 if menu == "Despesas Mensais":
     st.subheader("📋 Despesas Mensais")
 
-    st.dataframe(gestao.df, use_container_width=True)
+    # Mostrar tabela agrupada por categoria
+    for categoria, grupo in gestao.df.groupby("Categoria"):
+        st.markdown(f"### {categoria}")
+        st.table(grupo[["Despesa", "Valor"]].reset_index(drop=True))
 
     st.markdown("### ✏️ Atualizar despesa")
     st.caption("Formato: `água 50`")
@@ -95,11 +196,18 @@ elif menu == "Resumo":
 
     st.markdown("### Totais por categoria")
     resumo = gestao.df.groupby("Categoria")["Valor"].sum().reset_index()
-    st.dataframe(resumo, use_container_width=True)
+    st.table(resumo)
 
-# ---------- ALIMENTAÇÃO ----------
-elif menu == "Alimentação (em breve)":
-    st.info("🍽️ A secção de alimentação detalhada será adicionada aqui (listas de compras, pequeno-almoço, almoço, jantar).")
+# ---------- LISTA DE COMPRAS ----------
+elif menu == "Lista de Compras":
+    st.subheader("🛒 Lista de Compras")
+
+    for categoria, itens in gestao.lista_compras.items():
+        st.markdown(f"### {categoria}")
+        for item in itens:
+            st.write(f"- {item}")
+
+
 
 
 
