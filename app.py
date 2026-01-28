@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # ====== Classe de Gestão Familiar ======
 class GestaoFamiliar:
@@ -78,9 +79,15 @@ with st.expander("💰 Despesas Gerais"):
     # Gráficos por categoria
     st.subheader("Gráficos de Despesas")
     df_cat = gestao.df_despesas.groupby("Categoria")["Valor"].sum().reset_index()
-    st.bar_chart(df_cat.rename(columns={"Categoria":"index"}).set_index("Categoria"))
-    st.write("Distribuição por categoria:")
-    st.pyplot(df_cat.plot.pie(y="Valor", labels=df_cat["Categoria"], autopct='%1.1f%%', legend=False).figure)
+
+    # Gráfico de barras
+    st.bar_chart(df_cat.set_index("Categoria"))
+
+    # Gráfico de pizza
+    fig, ax = plt.subplots()
+    ax.pie(df_cat["Valor"], labels=df_cat["Categoria"], autopct='%1.1f%%', startangle=90)
+    ax.axis("equal")
+    st.pyplot(fig)
 
 # ====== Alimentação ======
 with st.expander("🍎 Alimentação / Lista de Compras"):
@@ -100,3 +107,5 @@ with st.expander("🍎 Alimentação / Lista de Compras"):
             st.success(f"{item} adicionado à categoria {categoria}!")
 
 st.write("✅ Todas as alterações são refletidas em tempo real nas tabelas acima.")
+
+
