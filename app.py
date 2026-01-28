@@ -6,26 +6,37 @@ st.set_page_config(page_title="Gestão Familiar", layout="wide")
 # ---------- Classe ----------
 class GestaoFamiliar:
     def __init__(self):
-        data = [
-            # Despesas Fixas
-            ("Despesas Fixas", "Água", 30),
-            ("Despesas Fixas", "Luz", 200),
-            ("Despesas Fixas", "Gás", 30),
-            ("Despesas Fixas", "Renda da casa", 450),
-            ("Despesas Fixas", "Créditos", 250),
 
-            # Alimentação
-            ("Alimentação", "Comida mês", 200),
-            ("Alimentação", "Jantares fora", 0),
-            ("Alimentação", "Extras", 0),
-            ("Alimentação", "Coisas para a casa", 0),
+        categorias = {
+            "Despesas Fixas": {
+                "Água": 30,
+                "Luz": 200,
+                "Gás": 30,
+                "Renda da casa": 450,
+                "Créditos": 250,
+            },
+            "Alimentação": {
+                "Comida mês": 200,
+                "Jantares fora": 0,
+                "Extras": 0,
+                "Coisas para a casa": 0,
+            },
+            "Presentes": {
+                "Aniversários": 0,
+                "Natal": 0,
+            },
+            "Férias": {
+                "Férias": 0,
+            },
+            "Poupanças": {
+                "Poupanças": 0,
+            },
+        }
 
-            # Outros
-            ("Presentes", "Aniversários", 0),
-            ("Presentes", "Natal", 0),
-            ("Férias", "Férias", 0),
-            ("Poupanças", "Poupanças", 0),
-        ]
+        data = []
+        for categoria, despesas in categorias.items():
+            for despesa, valor in despesas.items():
+                data.append((categoria, despesa, valor))
 
         self.df = pd.DataFrame(data, columns=["Categoria", "Despesa", "Valor"])
 
@@ -89,6 +100,7 @@ elif menu == "Resumo":
 # ---------- ALIMENTAÇÃO ----------
 elif menu == "Alimentação (em breve)":
     st.info("🍽️ A secção de alimentação detalhada será adicionada aqui (listas de compras, pequeno-almoço, almoço, jantar).")
+
 
 
 
