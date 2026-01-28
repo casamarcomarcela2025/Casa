@@ -7,12 +7,12 @@ st.set_page_config(page_title="Gestão Familiar", layout="wide")
 class GestaoFamiliar:
     def __init__(self):
         data = [
-            # Serviços
-            ("Serviços", "Água", 30),
-            ("Serviços", "Luz", 200),
-            ("Serviços", "Gás", 30),
-            ("Serviços", "Renda da casa", 450),
-            ("Serviços", "Créditos", 250),
+            # Despesas Fixas
+            ("Despesas Fixas", "Água", 30),
+            ("Despesas Fixas", "Luz", 200),
+            ("Despesas Fixas", "Gás", 30),
+            ("Despesas Fixas", "Renda da casa", 450),
+            ("Despesas Fixas", "Créditos", 250),
 
             # Alimentação
             ("Alimentação", "Comida mês", 200),
@@ -89,6 +89,7 @@ elif menu == "Resumo":
 # ---------- ALIMENTAÇÃO ----------
 elif menu == "Alimentação (em breve)":
     st.info("🍽️ A secção de alimentação detalhada será adicionada aqui (listas de compras, pequeno-almoço, almoço, jantar).")
+
 
 
 
