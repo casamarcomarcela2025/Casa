@@ -40,108 +40,118 @@ class GestaoFamiliar:
 
         self.df = pd.DataFrame(data, columns=["Categoria", "Despesa", "Valor"])
 
-        # Lista de compras
-        self.lista_compras = {
-            "Laticínios / Alternativas": [
-                "Iogurte magro natural/aromas sem açúcar",
-                "Kefir",
-                "Leite magro ou bebida vegetal sem açúcar",
-                "Queijo magro fatiado",
-                "Queijo fresco",
-            ],
-            "Cereais / Grãos": [
-                "Flocos de aveia fina",
-                "Cereais sem açúcar adicionado",
-                "Tapioca",
-            ],
-            "Frutos Secos / Sementes": [
-                "Frutos secos variados",
-                "Sementes (linhaça, girassol, abóbora, sésamo)",
-                "Chia",
-            ],
-            "Frutas": [
-                "Maçã",
-                "Laranja",
-                "Kiwi",
-                "Frutos vermelhos",
-                "Banana",
-                "Limão",
-            ],
-            "Óleos / Gorduras": [
-                "Azeite",
-                "Óleo de coco",
-            ],
-            "Adoçantes / Temperos": [
-                "Mel",
-                "Xarope de agave",
-                "Canela em pó",
-                "Essência de baunilha",
-            ],
-            "Proteínas": [
-                "Fiambre de aves",
-                "Whey protein",
-                "Ovos",
-                "Carne de aves",
-                "Peixe",
-                "Salmão fumado",
-                "Atum em lata",
-                "Camarões",
-                "Queijo fresco",
-                "Requeijão",
-                "Mozarela de búfala light",
-                "Grão-de-bico",
-                "Feijão",
-                "Favas",
-                "Edamame",
-                "Ervilhas",
-            ],
-            "Vegetais": [
-                "Alface",
-                "Rúcula",
-                "Espinafre",
-                "Agrião",
-                "Couve",
-                "Cenoura",
-                "Brócolos",
-                "Abobrinha",
-                "Pimentos",
-                "Tomate",
-                "Pepino",
-                "Beterraba",
-                "Legumes congelados",
-            ],
-            "Bebidas": [
-                "Chá",
-                "Tisana",
-                "Cevada",
-                "Chicória",
-                "Água",
-            ],
-            "Extras Alimentares": [
-                "Compota sem açúcar",
-                "Gelatina",
-                "Pudim de gelatina",
-                "Mousse de gelatina",
-                "Barrita saudável",
-                "Bolachas simples",
-                "Tostas integrais",
-                "Tortilhas de milho",
-                "Tortilhas de arroz",
-                "Tortilhas de grão-de-bico",
-            ],
-            "Outros (Casa / Higiene)": [
-                "Guardanapos",
-                "Gel de banho",
-                "Papel higiénico",
-                "Desentupidor",
-                "Limpador de sanitas",
-            ],
-        }
+        # Lista de compras com valor inicial 0
+        lista_itens = [
+            # Laticínios
+            "Iogurte magro natural/aromas sem açúcar",
+            "Kefir",
+            "Leite magro ou bebida vegetal sem açúcar",
+            "Queijo magro fatiado",
+            "Queijo fresco",
+
+            # Cereais / Grãos
+            "Flocos de aveia fina",
+            "Cereais sem açúcar adicionado",
+            "Tapioca",
+
+            # Frutos Secos / Sementes
+            "Frutos secos variados",
+            "Sementes (linhaça, girassol, abóbora, sésamo)",
+            "Chia",
+
+            # Frutas
+            "Maçã",
+            "Laranja",
+            "Kiwi",
+            "Frutos vermelhos",
+            "Banana",
+            "Limão",
+
+            # Óleos / Gorduras
+            "Azeite",
+            "Óleo de coco",
+
+            # Adoçantes / Temperos
+            "Mel",
+            "Xarope de agave",
+            "Canela em pó",
+            "Essência de baunilha",
+
+            # Proteínas
+            "Fiambre de aves",
+            "Whey protein",
+            "Ovos",
+            "Carne de aves",
+            "Peixe",
+            "Salmão fumado",
+            "Atum em lata",
+            "Camarões",
+            "Queijo fresco",
+            "Requeijão",
+            "Mozarela de búfala light",
+            "Grão-de-bico",
+            "Feijão",
+            "Favas",
+            "Edamame",
+            "Ervilhas",
+
+            # Vegetais
+            "Alface",
+            "Rúcula",
+            "Espinafre",
+            "Agrião",
+            "Couve",
+            "Cenoura",
+            "Brócolos",
+            "Abobrinha",
+            "Pimentos",
+            "Tomate",
+            "Pepino",
+            "Beterraba",
+            "Legumes congelados",
+
+            # Bebidas
+            "Chá",
+            "Tisana",
+            "Cevada",
+            "Chicória",
+            "Água",
+
+            # Extras alimentares
+            "Compota sem açúcar",
+            "Gelatina",
+            "Pudim de gelatina",
+            "Mousse de gelatina",
+            "Barrita saudável",
+            "Bolachas simples",
+            "Tostas integrais",
+            "Tortilhas de milho",
+            "Tortilhas de arroz",
+            "Tortilhas de grão-de-bico",
+
+            # Outros
+            "Guardanapos",
+            "Gel de banho",
+            "Papel higiénico",
+            "Desentupidor",
+            "Limpador de sanitas"
+        ]
+
+        # Criar DataFrame da lista de compras
+        self.df_compras = pd.DataFrame(lista_itens, columns=["Item"])
+        self.df_compras["Valor"] = 0  # Inicializa valores com 0
 
     def atualizar_valor(self, despesa, valor):
         mask = self.df["Despesa"].str.lower() == despesa.lower()
         if mask.any():
             self.df.loc[mask, "Valor"] = valor
+            return True
+        return False
+
+    def atualizar_compra(self, item, valor):
+        mask = self.df_compras["Item"].str.lower() == item.lower()
+        if mask.any():
+            self.df_compras.loc[mask, "Valor"] = valor
             return True
         return False
 
@@ -164,10 +174,8 @@ menu = st.selectbox(
 if menu == "Despesas Mensais":
     st.subheader("📋 Despesas Mensais")
 
-    # Mostrar tabela agrupada por categoria
-    for categoria, grupo in gestao.df.groupby("Categoria"):
-        st.markdown(f"### {categoria}")
-        st.table(grupo[["Despesa", "Valor"]].reset_index(drop=True))
+    # Mostrar tabela de despesas simples
+    st.dataframe(gestao.df, use_container_width=True)
 
     st.markdown("### ✏️ Atualizar despesa")
     st.caption("Formato: `água 50`")
@@ -196,20 +204,28 @@ elif menu == "Resumo":
 
     st.markdown("### Totais por categoria")
     resumo = gestao.df.groupby("Categoria")["Valor"].sum().reset_index()
-    st.table(resumo)
+    st.dataframe(resumo, use_container_width=True)
 
 # ---------- LISTA DE COMPRAS ----------
 elif menu == "Lista de Compras":
     st.subheader("🛒 Lista de Compras")
 
-    for categoria, itens in gestao.lista_compras.items():
-        st.markdown(f"### {categoria}")
-        for item in itens:
-            st.write(f"- {item}")
+    st.dataframe(gestao.df_compras, use_container_width=True)
 
+    st.markdown("### ✏️ Atualizar valor da compra")
+    st.caption("Formato: `Leite magro 2.5`")
 
+    entrada_compra = st.text_input("Introduz item e valor:")
 
+    if st.button("Atualizar Compra"):
+        try:
+            nome_item, valor_item = entrada_compra.rsplit(" ", 1)
+            valor_item = float(valor_item)
 
+            if gestao.atualizar_compra(nome_item, valor_item):
+                st.success(f"✅ {nome_item} atualizado para {valor_item} €")
+            else:
+                st.error("❌ Item não encontrado na lista de compras")
 
-
-
+        except ValueError:
+            st.error("⚠️ Formato inválido. Usa: Leite magro 2.5")
